@@ -41,7 +41,7 @@ Run and expose a sample application titled `hello-app`. This will create a Kuber
 kubectl run hello-app --image=gcr.io/google-samples/hello-app:1.0 --port=8080 --expose
 ```
 
-## Deploy Nginx Ingress Controller
+## Deploy Nginx Ingress Controller and Kubernetes Ingress
 Run the commands below to deploy the nginx-ingress-controller. This will create a Kubernetes deployment and a Kubernetes `LoadBalancer` service.
 ```
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/mandatory.yaml
@@ -62,7 +62,7 @@ Run the `kubectl` command below to create the network policy that will only allo
 kubectl apply -f netpol.yaml
 ```
 
-## Test Network Policy with Nginx Ingress Controller and Kubernetes Ingress
+## Test Network Policy with Nginx Ingress Controller 
 Run the below command and you should have your nginx ingress public IP. This typically takes a few minutes, so run the command again if the IP address is still being allocated.
 ```
 kubectl get service nginx-ingress-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}'

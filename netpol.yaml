@@ -12,6 +12,6 @@ spec:
       - namespaceSelector:      # allows traffic from namespace with label app.kubernetes.io/name=ingress-nginx 
           matchLabels:
             app.kubernetes.io/name: ingress-nginx  
-        podSelector:           # allows pods with label app.kubernetes.io/name=ingress-nginx
+        podSelector:           # allows traffic from pods with label app.kubernetes.io/name=ingress-nginx
           matchLabels:
             app.kubernetes.io/name: ingress-nginx

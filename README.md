@@ -62,7 +62,7 @@ Run the `kubectl` command below to create the network policy that will only allo
 kubectl apply -f netpol.yaml
 ```
 
-## Test Network Policy with Nginx Ingress Controller
+## Test Network Policy with Nginx Ingress Controller and Kubernetes Ingress
 Run the below command and you should have your nginx ingress public IP. This typically takes a few minutes, so run the command again if the IP address is still being allocated.
 ```
 kubectl get service nginx-ingress-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}'

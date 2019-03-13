@@ -1,15 +1,14 @@
 # Using Network Policies with the Nginx Ingress Controller
 
-This tutorial shows how to ensure that a set of pods are only accessible from the nginx ingress controller using network policies.
+_Copyright 2018 Google LLC. This software is provided as-is, without warranty or representation for any use or purpose. Your use of it is subject to your agreements with Google. This is NOT a Google official product._
 
-Copyright 2018 Google LLC. This software is provided as-is, without warranty or representation for any use or purpose. Your use of it is subject to your agreements with Google.
-
-This is NOT a Google official product. 
+This tutorial shows how to ensure that a set of pods are only accessible from the nginx ingress controller using network policies. 
 
 ## Requirements
 
 * Google Cloud Platform project
 * gcloud set up and initialized for a project with the Kubernetes Engine API enabled.
+* Basic Kubernetes knowledge
 
 ## Summary
 

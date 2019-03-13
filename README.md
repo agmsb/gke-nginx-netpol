@@ -15,10 +15,9 @@ This is NOT a Google official product.
 
 You can use GKE's network policy enforcement to control the communication between your cluster's Pods and Services. To define a network policy on GKE, you can use the Kubernetes Network Policy API to create Pod-level firewall rules. These firewall rules determine which Pods and Services can access one another inside your cluster.
 
-This repo expands on [this](https://cloud.google.com/community/tutorials/nginx-ingress-gke) tutorial by applying network policies to ensure that only traffic from the nginx ingress controller is allowed to the pod; all other traffic from other pods will be denied. 
+This repo applies network policies to ensure that only traffic from the nginx ingress controller is allowed to the pod; all other traffic from other pods will be denied. 
 
-
-## Usage
+## Setup
 
 Clone this repository.
 
@@ -28,28 +27,28 @@ gcloud config set compute/zone us-west1-a
 gcloud container clusters create nginx-net-pol-demo --enable-network-policy
 ```
 
-Run and expose a sample application titled `hello-app`. This will create a Kubernetes deployment and a Kubernetes service.
+Set your user to have cluster-admin clusterrole via a clusterrolebinding.
+```
+USER=<youremailaddress@example.com>
+```
+```
+kubectl create clusterrolebinding cluster-admin-binding \
+      --clusterrole cluster-admin --user $USER
+```
+## Deploy Sample App
+Run and expose a sample application titled `hello-app`. This will create a Kubernetes deployment and a Kubernetes `ClusterIP` service.
 ```
 kubectl run hello-app --image=gcr.io/google-samples/hello-app:1.0 --port=8080 --expose
 ```
 
-Helm is a tool we will use to deploy the nginx ingress controller. If you don't have helm installed, run the commands below from your workstation.
+## Deploy Nginx Ingress Controller
+Run the commands below to deploy the nginx-ingress-controller. This will create a Kubernetes deployment and a Kubernetes `LoadBalancer` service.
 ```
-curl -o get_helm.sh https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get
-chmod +x get_helm.sh
-./get_helm.sh
-```
-
-Run the commands below to install `tiller`, which is helm's server side component, in our GKE cluster. Please note: by default, Tiller is deployed with an insecure 'allow unauthenticated users' policy. Therefore, this is not secure and only serves as a demonstration.
-```
-kubectl create serviceaccount --namespace kube-system tiller
-kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
-helm init --service-account tiller
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/mandatory.yaml
 ```
 
-Run the command below to use helm to install the nginx ingress controller.
 ```
-helm install --name nginx-ingress stable/nginx-ingress --set rbac.create=true
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/provider/cloud-generic.yaml
 ```
 
 Run the `kubectl` command below to create the Kubernetes Ingress resource that will route to our `hello-app` service.
@@ -57,11 +56,13 @@ Run the `kubectl` command below to create the Kubernetes Ingress resource that w
 kubectl apply -f ingress.yaml
 ```
 
-Run the `kubectl` command below to create the network policy that will only allow traffic to our `hello-app` pods with the label `app=nginx-ingress`. 
+## Create Network Policy
+Run the `kubectl` command below to create the network policy that will only allow traffic to our `hello-app` from pods with the label `app.kubernetes.io/name: ingress-nginx` and from a namespace with the label `app.kubernetes.io/name: ingress-nginx`. 
 ```
 kubectl apply -f netpol.yaml
 ```
 
+## Test Network Policy with Nginx Ingress Controller
 Run the below command and you should have your nginx ingress public IP. This typically takes a few minutes, so run the command again if the IP address is still being allocated.
 ```
 kubectl get service nginx-ingress-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
@@ -87,4 +88,3 @@ You should get the below. This is our network policy in effect.
 ```
 wget: download timed out
 ```
-

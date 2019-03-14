@@ -64,12 +64,12 @@ kubectl apply -f netpol.yaml
 ## Test Network Policy with Nginx Ingress Controller 
 Run the below command and you should have your nginx ingress public IP. This typically takes a few minutes, so run the command again if the IP address is still being allocated.
 ```
-kubectl get service nginx-ingress-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+kubectl get service nginx-ingress-controller -n ingress-nginx -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
 ```
 
 Export the IP to `$NGINX_IP` and curl the public IP to access `hello-app` via the nginx ingress controller.
 ```
-NGINX_IP=$(kubectl get service nginx-ingress-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}') && echo $NGINX_IP
+NGINX_IP=$(kubectl get service nginx-ingress-controller -n ingress-nginx -o jsonpath='{.status.loadBalancer.ingress[0].ip}') && echo $NGINX_IP
 ```
 ```
 curl http://$NGINX_IP/hello

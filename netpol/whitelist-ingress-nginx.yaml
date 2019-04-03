@@ -1,8 +1,7 @@
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: hello-app-allow
-  namespace: default
+  name: whitelist-ingress-nginx
 spec:
   podSelector:
     matchLabels:

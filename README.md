@@ -29,8 +29,7 @@ gcloud container clusters create gke-nginx-netpol --enable-network-policy
 Set your user to have cluster-admin clusterrole via a clusterrolebinding.
 ```
 GCLOUD_USER=$(gcloud config get-value account)
-```
-```
+
 kubectl create clusterrolebinding cluster-admin-binding \
       --clusterrole cluster-admin --user $GCLOUD_USER
 ```
@@ -71,7 +70,7 @@ kubectl apply -f netpol/whitelist-ingress-nginx.yaml
 The second is a network policy that will whitelist traffic in the default namespace from source IPs within a given IP block. In this case, we would whitelist the entire GKE pod CIDR, meaning all pod IPs, including the ingress-nginx controller, will be able to reach our `hello-app`. 
 
 ```
-gcloud container clusters describe gke-nginx-netpol --zone us-central1-a | grep clusterIpv4CidrBlock | awk '{ print $2 }'
+gcloud container clusters describe gke-nginx-netpol --zone us-west1-a | grep clusterIpv4CidrBlock | awk '{ print $2 }'
 ```
 
 Replace `spec.ingress.from.ipBlock.cidr` with this value in `netpol/whitelist-podcidr.yaml`. Then apply the whitelist-podcidr.yaml.

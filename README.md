@@ -1,6 +1,6 @@
 # Using Network Policies with the Nginx Ingress Controller
 
-_Copyright 2018 Google LLC. This software is provided as-is, without warranty or representation for any use or purpose. Your use of it is subject to your agreements with Google. This is NOT a Google official product._
+_Copyright 2019 Google LLC. This software is provided as-is, without warranty or representation for any use or purpose. Your use of it is subject to your agreements with Google. This is NOT a Google official product._
 
 This tutorial shows how to ensure that a set of pods are only accessible from the nginx ingress controller using network policies. 
 
@@ -58,7 +58,8 @@ kubectl apply -f ingress.yaml
 ## Create Network Policy
 Run the `kubectl` command below to create the network policy that will only allow traffic to our `hello-app` from pods with the label `app.kubernetes.io/name: ingress-nginx` and from a namespace with the label `app.kubernetes.io/name: ingress-nginx`. 
 ```
-kubectl apply -f netpol.yaml
+kubectl apply -f deny-all.yaml
+kubectl apply -f whitelist-ingress-nginx.yaml
 ```
 
 ## Test Network Policy with Nginx Ingress Controller 
@@ -80,7 +81,7 @@ Now try to access `hello-app` via a test pod running in your cluster. You will u
 kubectl run test-$RANDOM --rm -i -t --image=alpine -- sh
 ```
 ```
-# / wget -qO- --timeout=2 http://hello-app
+# / wget -qO- --timeout=2 http://hello-app:8080
 ```
 
 You should get the below. This is our network policy in effect.

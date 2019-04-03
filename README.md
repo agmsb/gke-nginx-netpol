@@ -28,11 +28,11 @@ gcloud container clusters create gke-nginx-netpol --enable-network-policy
 
 Set your user to have cluster-admin clusterrole via a clusterrolebinding.
 ```
-USER=<youremailaddress@example.com>
+GCLOUD_USER=$(gcloud config get-value account)
 ```
 ```
 kubectl create clusterrolebinding cluster-admin-binding \
-      --clusterrole cluster-admin --user $USER
+      --clusterrole cluster-admin --user $GCLOUD_USER
 ```
 ## Deploy Sample App
 Run and expose a sample application titled `hello-app`. This will create a Kubernetes deployment and a Kubernetes `ClusterIP` service.
